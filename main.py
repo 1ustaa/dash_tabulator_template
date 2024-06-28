@@ -1,48 +1,33 @@
 import dash
 from dash import dcc, html
-import dash_tabulator
-import pandas as pd
+from templates import tabulator
+import os
+import dash_mantine_components as dmc
 
+os.environ['REACT_VERSION'] = '18.2.0'
 
-csv_file = 'cost_item_dic.csv'
+stylesheets = [
+    "https://unpkg.com/@mantine/dates@7/styles.css",
+    "https://unpkg.com/@mantine/code-highlight@7/styles.css",
+    "https://unpkg.com/@mantine/charts@7/styles.css",
+    "https://unpkg.com/@mantine/carousel@7/styles.css",
+    "https://unpkg.com/@mantine/notifications@7/styles.css",
+    "https://unpkg.com/@mantine/nprogress@7/styles.css",
+]
 
-df = pd.read_csv(csv_file)
+app = dash.Dash(__name__, external_stylesheets=stylesheets)
 
-df['parent'] = df['parent'].replace({pd.NA: None, float('nan'): None})
-
-data = [{'id': row['id'],
-         'parent': row['parent'],
-         'name': row['name'],
-         'id_1c': row['id_1c'],
-         'children': []} for index, row in df.iterrows()]
-
-id_map = {item['id_1c']: item for item in data}
-
-for item in data:
-    parent_id = item['parent']
-    if parent_id:
-        parent_item = id_map.get(parent_id)
-        if parent_item:
-            parent_item['children'].append(item)
-
-parent_data = [item for item in data if item['parent'] is None]
-
-app = dash.Dash(__name__)
-
-app.layout = html.Div([
-    dash_tabulator.DashTabulator(
-        id='table',
-        columns=[
-            {'title': 'ID', 'field': 'id'},
-            {'title': 'Name', 'field': 'name'},
-        ],
-        data=parent_data,
-        options={
-            "dataTree": True,
-            "dataTreeChildField": "children"
-        }
-    ),
-])
+app.layout = dmc.MantineProvider(
+    forceColorScheme="dark",
+    children=dmc.Container([
+        dmc.Space(h="xl"),
+        dmc.Text(
+            fw="700",
+            size="xl",
+            children="Таблица",
+            style={'textAlign': "center"}),
+        tabulator()
+    ]))
 
 if __name__ == '__main__':
     app.run_server(debug=True)

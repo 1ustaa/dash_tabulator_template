@@ -3,5 +3,5 @@
   <component name="Black">
     <option name="sdkName" value="Python 3.12 (vizualize_table)" />
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.12 (vizualize_table)" project-jdk-type="Python SDK" />
+  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.12 (dash_tabulator_template)" project-jdk-type="Python SDK" />
 </project>
