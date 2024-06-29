@@ -32,7 +32,7 @@ def tabulator():
         theme="tabulator_midnight",
         id='table',
         columns=[
-            {'title': 'Name', 'field': 'name'},
+            {'title': 'Наименование', 'field': 'name'},
         ],
         data=parent_data,
         options={
